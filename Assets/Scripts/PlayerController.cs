@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody PlayerRigidbody;
     [SerializeField]private float Speed = 10;
 
+    public bool HasPowerUp;
+
     //Localizamos el GameObject
     private GameObject FocalPoint;
     // Start is called before the first frame update
@@ -25,5 +27,14 @@ public class PlayerController : MonoBehaviour
         PlayerRigidbody.AddForce(FocalPoint.transform.forward * Speed * VerticalInput);
         float HorizontalInput = Input.GetAxis("Horizontal");
         PlayerRigidbody.AddForce(FocalPoint.transform.right * Speed * HorizontalInput);
+    }
+
+    private void OnTriggerEnter(Collider otherCollider)
+    {
+        if (otherCollider.gameObject.CompareTag("Power Up"))
+        {
+            HasPowerUp = true;
+            Destroy(otherCollider.gameObject);
+        }
     }
 }
