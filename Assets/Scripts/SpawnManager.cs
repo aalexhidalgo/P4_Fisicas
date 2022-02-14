@@ -9,16 +9,26 @@ public class SpawnManager : MonoBehaviour
     private float XLimit = 9f;
 
     public GameObject Enemy;
+    public GameObject PowerUp;
 
+    private int EnemiesPerWave = 1;
+    private int EnemiesLeft;
     void Start()
     {
-        RandomSpawnPosition();
+        Instantiate(PowerUp, RandomSpawnPosition(), PowerUp.transform.rotation);
+        SpawnEnemyWave(EnemiesPerWave);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        EnemiesLeft = FindObjectsOfType<Enemy>().Length;
+        if (EnemiesLeft <= 0)
+        {
+            EnemiesPerWave++;
+            SpawnEnemyWave(EnemiesPerWave);
+            Instantiate(PowerUp, RandomSpawnPosition(), PowerUp.transform.rotation);
+        }
     }
 
     public Vector3 RandomSpawnPosition()
@@ -30,5 +40,13 @@ public class SpawnManager : MonoBehaviour
     private void SpawnEnemy()
     {
         Instantiate(Enemy, RandomSpawnPosition(), Enemy.transform.rotation);
+    }
+
+    private void SpawnEnemyWave (int TotalEnemies)
+    {
+        for (int i = 0; i < TotalEnemies; i++)
+        {
+            SpawnEnemy();
+        }
     }
 }
